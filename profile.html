@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - WorkFlow Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <h2>WorkFlow</h2>
+                </div>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <!-- Navigation will be loaded based on user role -->
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>Profile</h1>
+            </header>
+
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <span id="avatarText">A</span>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="profileName">Loading...</h2>
+                            <p id="profileRole">Loading...</p>
+                        </div>
+                    </div>
+                    
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-group">
+                            <label for="profileUsername">Username</label>
+                            <input type="text" id="profileUsername" name="profileUsername" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" id="profileEmail" name="profileEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profileFullName">Full Name</label>
+                            <input type="text" id="profileFullName" name="profileFullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword">
+                        </div>
+                        
+                        <button type="submit" class="primary-btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadProfile();
+            setupNavigation();
+        });
+
+        function loadProfile() {
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                document.getElementById('profileName').textContent = currentUser.fullName || currentUser.username;
+                document.getElementById('profileRole').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+                document.getElementById('avatarText').textContent = (currentUser.fullName || currentUser.username).charAt(0).toUpperCase();
+                
+                document.getElementById('profileUsername').value = currentUser.username;
+                document.getElementById('profileEmail').value = currentUser.email || '';
+                document.getElementById('profileFullName').value = currentUser.fullName || '';
+            }
+        }
+
+        function setupNavigation() {
+            const currentUser = getCurrentUser();
+            const navMenu = document.getElementById('navMenu');
+            
+            if (currentUser.role === 'admin') {
+                navMenu.innerHTML = `
+                    <li><a href="admin-dashboard.html" class="nav-link">📊 Dashboard</a></li>
+                    <li><a href="user-management.html" class="nav-link">👥 Users</a></li>
+                    <li><a href="task-management.html" class="nav-link">📋 Tasks</a></li>
+                    <li><a href="profile.html" class="nav-link active">👤 Profile</a></li>
+                    <li><a href="#" onclick="logout()" class="nav-link">🚪 Logout</a></li>
+                `;
+            } else {
+                navMenu.innerHTML = `
+                    <li><a href="worker-dashboard.html" class="nav-link">📊 Dashboard</a></li>
+                    <li><a href="profile.html" class="nav-link active">👤 Profile</a></li>
+                    <li><a href="#" onclick="logout()" class="nav-link">🚪 Logout</a></li>
+                `;
+            }
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('profileEmail').value;
+            const fullName = document.getElementById('profileFullName').value;
+            
+            const currentUser = getCurrentUser();
+            
+            // Validate current password if changing password
+            if (newPassword && currentPassword !== currentUser.password) {
+                showNotification('Current password is incorrect', 'error');
+                return;
+            }
+            
+            // Validate new password confirmation
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            // Update user data
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.username === currentUser.username);
+            
+            if (userIndex !== -1) {
+                users[userIndex].email = email;
+                users[userIndex].fullName = fullName;
+                
+                if (newPassword) {
+                    users[userIndex].password = newPassword;
+                }
+                
+                saveUsers(users);
+                setCurrentUser(users[userIndex]);
+                showNotification('Profile updated successfully', 'success');
+                loadProfile();
+            }
+        });
+    </script>
+</body>
+</html>

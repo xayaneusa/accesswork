@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - WorkFlow Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <h2>WorkFlow</h2>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="admin-dashboard.html" class="nav-link active">📊 Dashboard</a></li>
+                <li><a href="user-management.html" class="nav-link">👥 Users</a></li>
+                <li><a href="task-management.html" class="nav-link">📋 Tasks</a></li>
+                <li><a href="profile.html" class="nav-link">👤 Profile</a></li>
+                <li><a href="#" onclick="logout()" class="nav-link">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <div class="user-info">
+                    <span id="welcomeMessage">Welcome, Admin</span>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">👷</div>
+                    <div class="stat-content">
+                        <h3 id="totalWorkers">0</h3>
+                        <p>Workers</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-content">
+                        <h3 id="totalTasks">0</h3>
+                        <p>Total Tasks</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3 id="completedTasks">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="content-section">
+                    <h2>Recent Tasks</h2>
+                    <div id="recentTasks" class="task-list">
+                        <!-- Recent tasks will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="window.location.href='user-management.html'">
+                            <span class="btn-icon">👤</span>
+                            Add User
+                        </button>
+                        <button class="action-btn" onclick="window.location.href='task-management.html'">
+                            <span class="btn-icon">📝</span>
+                            Create Task
+                        </button>
+                        <button class="action-btn" onclick="viewReports()">
+                            <span class="btn-icon">📊</span>
+                            View Reports
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

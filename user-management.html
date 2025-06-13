@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - WorkFlow Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <h2>WorkFlow</h2>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="admin-dashboard.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="user-management.html" class="nav-link active">👥 Users</a></li>
+                <li><a href="task-management.html" class="nav-link">📋 Tasks</a></li>
+                <li><a href="profile.html" class="nav-link">👤 Profile</a></li>
+                <li><a href="#" onclick="logout()" class="nav-link">🚪 Logout</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>User Management</h1>
+                <button class="primary-btn" onclick="showAddUserModal()">
+                    <span>➕</span> Add New User
+                </button>
+            </header>
+
+            <div class="content-section">
+                <div class="users-grid" id="usersGrid">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <span class="close" onclick="hideAddUserModal()">&times;</span>
+            </div>
+            <form id="addUserForm" class="modal-form">
+                <div class="form-group">
+                    <label for="newUsername">Username</label>
+                    <input type="text" id="newUsername" name="newUsername" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Password</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newRole">Role</label>
+                    <select id="newRole" name="newRole" required>
+                        <option value="worker">Worker</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newEmail">Email</label>
+                    <input type="email" id="newEmail" name="newEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newFullName">Full Name</label>
+                    <input type="text" id="newFullName" name="newFullName" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" onclick="hideAddUserModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        // Load users on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAuth();
+            loadUsers();
+        });
+    </script>
+</body>
+</html>
